@@ -22,14 +22,9 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public String createAccount(CreateAccountRequest createAccountRequest) {
 
-        Account account= new Account(generateAccountNumber(),
+        return STR."\{accountRepository.save(new Account(generateAccountNumber(),
                 createAccountRequest.getCustomerId()
-        );
-//        accountRepository
-//                .save(
-//
-//                );
-        return account.getAccountNumber()+ " Account Created Successfully ...! ";
+        )).getAccountNumber()} Account Created Successfully ...! ";
     }
 
     @Override
@@ -51,6 +46,6 @@ public class AccountServiceImpl implements AccountService {
     }
 
     private String generateAccountNumber() {
-        return String.format("%012", new Random().nextLong(1_000_000_000_000L));
+        return String.format("%012d", new Random().nextLong(1_000_000_000_000L));
     }
 }
