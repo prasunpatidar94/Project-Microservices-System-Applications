@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.math.BigDecimal;
 
 @RestController
-@RequestMapping("/account")
+@RequestMapping("/v1/account")
 @AllArgsConstructor
 public class AccountRestController {
 
@@ -35,6 +35,11 @@ public class AccountRestController {
     @PutMapping(path = "/deposit/{accountNumber}/{amount}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<AccountResponse> depositAmount(@PathVariable String accountNumber,@PathVariable BigDecimal amount) throws Throwable {
         return ResponseEntity.ok(accountService.depositAmount(accountNumber,amount));
+    }
+
+    @PutMapping(path = "/withdraw/{accountNumber}/{amount}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<AccountResponse> withdrawAmount(@PathVariable String accountNumber,@PathVariable BigDecimal amount) throws Throwable {
+        return ResponseEntity.ok(accountService.withdrawAmount(accountNumber,amount));
     }
 
 }

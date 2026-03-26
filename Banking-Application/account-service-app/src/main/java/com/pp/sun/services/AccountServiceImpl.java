@@ -7,6 +7,7 @@ import com.pp.sun.mapper.AccountMapper;
 import com.pp.sun.repository.AccountRepository;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import org.jspecify.annotations.Nullable;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -42,6 +43,13 @@ public class AccountServiceImpl implements AccountService {
 
         Account account = accountRepository.findByAccountNumber(accountNumber).orElseThrow(() -> new RuntimeException("Account not found"));
         account.deposit(amount);
+        return accountMapper.accountEntityToResponseDto(accountRepository.save(account));
+    }
+
+    @Override
+    public @Nullable AccountResponse withdrawAmount(String accountNumber, BigDecimal amount) {
+        Account account = accountRepository.findByAccountNumber(accountNumber).orElseThrow(()->new RuntimeException("Account not found"));
+        account.withdraw(amount);
         return accountMapper.accountEntityToResponseDto(accountRepository.save(account));
     }
 
