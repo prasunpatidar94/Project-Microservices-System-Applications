@@ -5,7 +5,7 @@ import lombok.Builder;
 import java.math.BigDecimal;
 
 @Builder
-public record AccountResponse (
+public record AccountResponse(
         String accountNumber,
         String customerId,
         BigDecimal balance,

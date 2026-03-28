@@ -13,20 +13,19 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(path = "v1/transection")
-@NoArgsConstructor
 @AllArgsConstructor
 public class TransactionRestController {
 
-    private TransactionServices transcationServices;
+    private TransactionServices transactionServices;
 
     @PostMapping(path = "/deposit")
-    public ResponseEntity<Void> deposit(@RequestBody TransctionRequest transctionRequest) {
-        transcationServices.deposit(transctionRequest);
+    public ResponseEntity<Void> deposit(@RequestBody TransctionRequest transctionRequest) throws Throwable {
+        transactionServices.deposit(transctionRequest);
        return ResponseEntity.ok().build();
     }
     @PostMapping(path = "/withdraw")
-    public ResponseEntity<Void> withdraw(@RequestBody TransctionRequest transctionRequest) {
-        transcationServices.withdraw(transctionRequest);
+    public ResponseEntity<Void> withdraw(@RequestBody TransctionRequest transctionRequest) throws Throwable {
+        transactionServices.withdraw(transctionRequest);
         return ResponseEntity.ok().build();
     }
 

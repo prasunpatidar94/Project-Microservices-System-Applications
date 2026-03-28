@@ -1,8 +1,14 @@
 package com.pp.sun.service;
 
+import com.pp.sun.dto.AccountResponse;
+import com.pp.sun.dto.TransactionResponse;
 import com.pp.sun.dto.TransctionRequest;
-import com.pp.sun.repositrory.TransctionRepository;
+import com.pp.sun.entiry.Transaction;
+import com.pp.sun.entiry.emum.TransactionType;
 import com.pp.sun.exception.DuplicateTransectionException;
+import com.pp.sun.feign.AccountFeignClient;
+import com.pp.sun.mapper.TransactionMapper;
+import com.pp.sun.repositrory.TransactionRepository;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
@@ -10,27 +16,50 @@ import org.springframework.stereotype.Service;
 
 @Transactional
 @Service
-@NoArgsConstructor
 @AllArgsConstructor
 public class TranscationServicesImpl implements TransactionServices {
-    private TransctionRepository transctionRepository;
+
+    private TransactionRepository transactionRepository;
+
+    private AccountFeignClient accountFeignController;
 
 
     @Override
-    public void deposit(TransctionRequest transctionRequest) {
+    public void deposit(TransctionRequest transctionRequest) throws Throwable {
 
-        transctionRepository.findByReferenceId(transctionRequest.refrenceId())
+        transactionRepository.findByReferenceId(transctionRequest.refrenceId())
                 .ifPresent(
                         trans -> {
-                            throw new DuplicateTransectionException(STR."Duplicate Transection For \{trans.getReferenceId()}...!");
+                            throw new DuplicateTransectionException("Duplicate Transection For " + trans.getReferenceId() + "...!");
                         });
 
-        
+        AccountResponse accountResponse = accountFeignController.depositAmount(transctionRequest.accountNumber(), transctionRequest.amount());
+
+        TransactionResponse transactionResponse = TransactionMapper.transcectionEntityToDtoMapper(transactionRepository.save(new Transaction(
+                transctionRequest.accountNumber(),
+                TransactionType.CREDIT,
+                transctionRequest.amount(),
+                transctionRequest.refrenceId()
+        )));
+
 
     }
 
     @Override
-    public void withdraw(TransctionRequest transctionRequest) {
+    public void withdraw(TransctionRequest transctionRequest) throws Throwable {
+        transactionRepository.findByReferenceId(transctionRequest.refrenceId())
+                .ifPresent(
+                        trans -> {
+                            throw new DuplicateTransectionException("Duplicate Transection For " + trans.getReferenceId() + "...!");
+                        });
 
+        AccountResponse accountResponse = accountFeignController.withdrawAmount(transctionRequest.accountNumber(), transctionRequest.amount());
+
+        TransactionResponse transactionResponse = TransactionMapper.transcectionEntityToDtoMapper(transactionRepository.save(new Transaction(
+                transctionRequest.accountNumber(),
+                TransactionType.DEBIT,
+                transctionRequest.amount(),
+                transctionRequest.refrenceId()
+        )));
     }
 }
