@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(path = "v1/transection")
+@RequestMapping(path = "v1/transaction")
 @AllArgsConstructor
 public class TransactionRestController {
 
