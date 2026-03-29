@@ -2,7 +2,6 @@ package com.pp.sun.services;
 
 import com.pp.sun.dto.AccountResponse;
 import com.pp.sun.dto.CreateAccountRequest;
-import org.jspecify.annotations.Nullable;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -13,7 +12,7 @@ public interface AccountService {
 
     AccountResponse getAccount(String customerId) throws Throwable;
 
-     AccountResponse depositAmount(String accountNumber, BigDecimal amount);
+    AccountResponse depositAmount(String accountNumber, BigDecimal amount);
 
-    @Nullable AccountResponse withdrawAmount(String accountNumber, BigDecimal amount);
+    AccountResponse withdrawAmount(String accountNumber, BigDecimal amount);
 }
